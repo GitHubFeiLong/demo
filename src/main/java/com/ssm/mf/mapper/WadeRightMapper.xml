@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssm.mf.wade.dao.WadeRightMapper">
+	<select id="selectNumber" resultType="int">
+	SELECT COUNT(1) FROM BASEINFORMATIONVIEW
+	</select>
+
+    <!-- 查询【主责部门】涉权主页数据 -->
+    <select id="selectWadeRightMain" resultType="com.ssm.mf.domain.WadeRightMain">
+    	SELECT 
+    		T1.wadeRight, T2.assign, T3.inspect, T4.publicity, T5.illegal, T6.mocratic
+    	FROM 
+			(SELECT 
+					COUNT(1) wadeRight FROM
+				    CONTRASTVIEWRESULT conview with(NOLOCK)
+				    INNER JOIN BASETABLE bt with(NOLOCK) ON bt.ID = conview.BTID
+					INNER JOIN BASEINFORMATIONVIEW base with(NOLOCK) ON bt.IDNUMBER = base.IDNUMBER
+					INNER JOIN DEPARTMENT dept with(NOLOCK) ON dept.ID = base.DEPARTMENTID
+			        INNER JOIN CONTRASTRESULT con with(NOLOCK) ON conview.ID=CON.RESULTSID
+			        WHERE  bt.STATUS = 1 AND conview.STATUS=1) T1
+			FULL JOIN
+			 (SELECT COUNT(1) assign FROM ACONTION a with(NOLOCK)
+			        INNER JOIN DEPARTMENT dept with(NOLOCK) on  a.DEPARTMENTID=dept.ID
+			        WHERE a.TYPE=1 AND a.ISRETURN=0 AND a.STATUS=1) T2 ON 1=1
+			FULL JOIN
+			 (SELECT SUM(n) inspect FROM (
+			            SELECT COUNT(1) n FROM ACONTION a with(NOLOCK)
+			            INNER JOIN DEPARTMENT dept with(NOLOCK) ON a.DEPARTMENTID=dept.ID
+			            WHERE  a.TYPE=2 AND a.ISRETURN=0 AND a.STATUS=1 AND a.WHETHERFIED=1
+			        UNION ALL
+			            SELECT COUNT(1) n FROM ACONTION a with(NOLOCK)
+			            INNER JOIN DEPARTMENT dept with(NOLOCK) on  A.DEPARTMENTID=dept.ID
+			            WHERE a.TYPE=2 AND a.ISRETURN=0 AND a.STATUS=1 AND a.DEPARTMENTID=dept.ID 
+			            AND a.WHETHERFIED=0
+			        ) AS T) T3 ON 1=1
+			FULL JOIN 
+			(SELECT COUNT(1) publicity
+				    FROM (SELECT * FROM ACONTION with(NOLOCK) WHERE TYPE=4 AND STATUS=1  AND ISRETURN=0 ) ACO
+					INNER JOIN  (select * from ACONTION with(NOLOCK) where TYPE=2 and STATUS=1 AND ISRETURN=0) AC ON AC.ID =ACO.PID
+					INNER join DEPARTMENT D with(NOLOCK) on ACO.DEPARTMENTID=D.ID
+					WHERE AC.WHETHERFIED=1 AND AC.Submit=1) T4 ON 1=1
+			FULL JOIN 
+			(SELECT COUNT(1) illegal FROM ACONTION A WITH(NOLOCK)
+			        INNER JOIN DEPARTMENT D WITH(NOLOCK) ON A.UnconformityUnit=D.ID
+			        WHERE A.TYPE=5 AND A.ISRETURN=0 AND A.STATUS=1) T5 ON 1=1
+			FULL JOIN 
+			( SELECT COUNT(1) mocratic FROM ACONTION a WITH(NOLOCK)
+			        INNER  JOIN DEPARTMENT dept WITH(NOLOCK) on  a.DEPARTMENTID=dept.ID
+			        WHERE a.TYPE=8 AND a.ISRETURN=0 AND a.STATUS=1) T6 ON 1=1
+    </select>
+    
+</mapper>
