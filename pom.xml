@@ -126,10 +126,16 @@
         <!-- spring相关end -->
         
 		<!-- mybatis核心包 -->
-		<dependency>
+		<!-- <dependency>
 		    <groupId>org.mybatis</groupId>
 		    <artifactId>mybatis</artifactId>
 		    <version>3.5.0</version>
+		</dependency> -->
+		<!-- 使用3.4.6看源代码 -->
+		<dependency>
+		    <groupId>org.mybatis</groupId>
+		    <artifactId>mybatis</artifactId>
+		    <version>3.4.6</version>
 		</dependency>
 
 		<!-- mybatis/spring包 -->
