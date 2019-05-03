@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssm.mf.uploadfile.dao.FileMapper">
+	
+	<!-- // 添加文件路径到数据库
+	void insertFile(File file); -->
+	<insert id="insertFile" parameterType="com.ssm.mf.domain.File">
+		insert into FILE 
+		(id,path,file_name,user_id)
+		values 
+		(#{file.id},#{file.path},#{file.fileName},#{file.userId})
+	</insert>
+	
+	<!-- //查询student
+	Student selectStudentById(Integer id); -->
+	<select id="selectStudentById" resultType="com.ssm.mf.domain.Student">
+		select id,username,age,subject,score,evaluate from student where id=#{id}
+	</select>
+	
+</mapper>

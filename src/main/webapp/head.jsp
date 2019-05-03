@@ -4,29 +4,17 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Insert title here</title>
+<title>页面head部分</title>
+<script type="text/javascript" src="./Content/jquery-3.4.0.js"></script>  
+<script type="text/javascript" src="./Content/jquery-easyui-1.7.6/jquery.min.js"></script>   
+<script type="text/javascript" src="./Content/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>  
+<script type="text/javascript" href="./Content/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+<link rel="stylesheet" type="text/css" href="./Content/jquery-easyui-1.7.6/themes/default/easyui.css">   
+<link rel="stylesheet" type="text/css" href="./Content/jquery-easyui-1.7.6/themes/icon.css">   
 </head>
 <body>
-	<div class="timebox">
-        	当前时间：<span class="time"></span>
-    </div>
-	<div class="topbox">
-		<div class="wrap wrap1">
-			<div id="div_select_1" class="btnbox" onclick="window.location.href='${APP_PATH}/dy.do'">数 据</div>
-			<div id="div_select_2" class="btnbox" onclick="window.location.href='${APP_PATH}/getWadeRight.do'">涉 权</div>
-			<div id="div_select_3" class="btnbox" onclick="window.location.href='${APP_PATH}/superviseCount.do'">督 办</div>
-		</div>
-		<div class="wrap">
-			<div id="div_select_4" class="btnbox" onclick='window.location.href="search.jsp"'>查 询</div>
-			<div class="btnbox kbj"></div>
-			<div class="btnbox kbj"></div>
-		</div>
+	<div>
+		<h1>工作完了，还来学习，辛苦了</h1>
 	</div>
-	
- <form  id="myForm" name="myForm" method="POST">
-        <input type="hidden" id="IDNumber" name="IDNumber">
-        <input type="hidden" id="cdid" name="cdid">
- </form>
-
 </body>
 </html>
