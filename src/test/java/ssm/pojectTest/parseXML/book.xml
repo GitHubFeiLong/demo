@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <books>
-	<book year="2000">
-		<title>Snow Crash</title>
-		<author>Neal Stephenson</author>
-		<publisher>Spectra</publisher>
-		<isbn>0553380958</isbn>
-		<price>14.95</price>
+	<book year="2000" month="5">
+		<title id="11">Snow Crash</title>
+		<author id="12">Neal Stephenson</author>
+		<publisher id="13">Spectra</publisher>
+		<isbn id="14">0553380958</isbn>
+		<price id="15">14.95</price>
 	</book>
 	<book year="2005">
 		<title>Burning Tower</title>
