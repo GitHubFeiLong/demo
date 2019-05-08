@@ -27,12 +27,12 @@ public class XPathTest {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		
 		// 开启验证
-//		factory.setValidating(true);
-//		factory.setNamespaceAware(false);
-//		factory.setIgnoringComments(true);
-//		factory.setIgnoringElementContentWhitespace(false);
-//		factory.setCoalescing(false);
-//		factory.setExpandEntityReferences(true);
+		factory.setValidating(true);
+		factory.setNamespaceAware(false);
+		factory.setIgnoringComments(true);
+		factory.setIgnoringElementContentWhitespace(false);
+		factory.setCoalescing(false);
+		factory.setExpandEntityReferences(true);
 		
 		try {
 			// 创建DocumentBuilder对象
@@ -70,19 +70,19 @@ public class XPathTest {
 			XPath xpath = xPathFactory.newXPath();
 			
 			// 编译XPath表达式
-			XPathExpression expression = xpath.compile("//book[autho='Neal Stephenson']/title/text()");
+			XPathExpression expression = xpath.compile("//book[author='Neal Stephenson']/title/text()");
 			// 通过XPath表达式得到结果，第一个参数制定了XPath表达式进行查询的上下文节点，也就是在指定节点下查找符合XPath的节点。
 			// 本例中的上下文节点就是整个文档；第二个参数制定了XPath表达式的返回类型
 			Object result = expression.evaluate(document, XPathConstants.NODESET);
 			
-			System.out.println("查询作责为Neal Stephenson的图书标题：");
+			System.out.println("查询作者为Neal Stephenson的图书标题：");
 			// 强制类型转换
 			NodeList list = (NodeList) result;
 			for (int i = 0; i < list.getLength(); i++) {
 				System.out.println(list.item(i).getNodeValue());
 			}
 			
-			NodeList nodeList = document.getElementsByTagName("books");
+			
 			
 		} catch (ParserConfigurationException e) {
 			// TODO Auto-generated catch block
