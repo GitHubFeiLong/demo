@@ -14,7 +14,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ssm.mf.domain.Student;
 import com.ssm.mf.uploadfile.service.FileService;
-
+/**
+ * 文件上传demo
+ * @author msi
+ * @date 2019年5月11日
+ */
 @Controller
 public class FileController {
 
