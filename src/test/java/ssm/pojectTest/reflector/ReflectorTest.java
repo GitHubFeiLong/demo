@@ -1,17 +1,25 @@
 package ssm.pojectTest.reflector;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.ReflectPermission;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.ibatis.reflection.ReflectionException;
+import org.apache.ibatis.reflection.TypeParameterResolver;
+import org.apache.ibatis.reflection.invoker.Invoker;
+import org.apache.ibatis.reflection.invoker.MethodInvoker;
 import org.apache.ibatis.reflection.property.PropertyNamer;
 
 /**
@@ -20,34 +28,54 @@ import org.apache.ibatis.reflection.property.PropertyNamer;
  * @date 2019年5月8日
  */
 public class ReflectorTest {
-
-	public static void main(String[] args) {
-		ReflectorTest r = new ReflectorTest();
-		Class<Demo> type = Demo.class;
-		Constructor<?>[] constructors = type.getDeclaredConstructors();
-		System.out.println(Arrays.toString(constructors));
-		for (Constructor<?> constructor : constructors) {
-			if (constructor.getParameterTypes().length == 0) {
-				System.out.println("无参构造函数");
-				if (canAccessPrivateMethods()) {
-					try {
-						constructor.setAccessible(true);
-					} catch (Exception e) {
-						// Ignored. This is only a final precaution, nothing we can do.
-					}
-				}
-				if (constructor.isAccessible()) {
-					System.out.println("h:" + constructor);
+	
+	private final Class<?> type;
+	private final String [] readablePropertyNames;
+	private final String [] writeablePropertyNames;
+	private final Map<String, Invoker> setMethods = new HashMap<String, Invoker>();
+	private final Map<String, Invoker> getMethods = new HashMap<String, Invoker>();
+	private final Map<String, Class<?>> setTypes = new HashMap<String, Class<?>>();
+	private final Map<String, Class<?>> getTypes = new HashMap<String, Class<?>>();
+	private Constructor<?> defaultConstructor;
+	
+	private Map<String, String> caseInsensitivePropertyMap = new HashMap<String, String>();
+	
+	public ReflectorTest(Class<?> clazz) {
+		type = clazz;
+		addDefaultConstructor(clazz);
+		addGetMethods(clazz);
+		addSetMethods(clazz);
+//		addFields(clazz);
+		readablePropertyNames = getMethods.keySet().toArray(new String[getMethods.keySet().size()]);
+		writeablePropertyNames = setMethods.keySet().toArray(new String [setMethods.keySet().size()] );
+		for (String propName : readablePropertyNames) {
+			caseInsensitivePropertyMap.put(propName.toUpperCase(Locale.ENGLISH), propName);
+		}
+		for (String propName : writeablePropertyNames) {
+			caseInsensitivePropertyMap.put(propName.toUpperCase(Locale.ENGLISH), propName);
+		}
+	}
+	
+	private void addDefaultConstructor(Class<?> clazz) {
+		Constructor<?>[] consts = clazz.getDeclaredConstructors();
+		for (Constructor<?> constructor : consts) {
+			if (constructor.getParameterTypes().length ==0) {
+				try {
+					constructor.setAccessible(true);
+				} catch (Exception e) {
+					
 				}
 			}
+			if (constructor.isAccessible()) {
+				this.defaultConstructor = constructor;
+			}
 		}
-		System.out.println("设置默认构造方法完毕");
-
-		 Map<String, List<Method>> conflictingGetters = new HashMap<>();
-		 Method[] methods = r.getClassMethods(type);
-		 r.addGetMethods(Demo.class);
-		
 	}
+
+	public static void main(String[] args) {
+		new ReflectorTest(Demo.class);
+	}
+	
 
 	/**
 	 * 添加get方法
@@ -105,7 +133,15 @@ public class ReflectorTest {
 				}
 				
 			}
-			
+			addGetMethod(propName, winner);
+		}
+	}
+	
+	private void addGetMethod(String name, Method method) {
+		if (isValidPropertyName(name)) {
+			getMethods.put(name, new MethodInvoker(method));
+			Type returnType = TypeParameterResolver.resolveReturnType(method, type);
+			getTypes.put(name, typeToClass(returnType));
 		}
 	}
 	
@@ -119,12 +155,15 @@ public class ReflectorTest {
 		for (Method method : methods) {
 			String name = method.getName();
 			if (name.startsWith("set") && name.length() > 3) {
-				name = PropertyNamer.methodToProperty(name);
-				addMethodConflict(conflictingSetters, name, method);
+				if (method.getParameterTypes().length == 1) {
+					name = PropertyNamer.methodToProperty(name);
+					addMethodConflict(conflictingSetters, name, method);
+				}
 			}
 		}
-		//resolverSetterConflicts(conflictingSetters);
+		resolverSetterConflicts(conflictingSetters);
 	}
+	
 	
 	private void addMethodConflict(Map<String, List<Method>> conflictingMethods, String name, Method method) {
 		List<Method> list = conflictingMethods.get(name);
@@ -136,8 +175,85 @@ public class ReflectorTest {
 		
 	}
 	
+	private void resolverSetterConflicts(Map<String, List<Method>> conflictingSetters) {
+		for (String propName : conflictingSetters.keySet()) {
+			List<Method> setters = conflictingSetters.get(propName);
+			Class<?> getterType = getTypes.get(propName);
+			Method match = null;
+			ReflectionException exception = null;
+			for (Method setter : setters) {
+				Class<?> paramType = setter.getParameterTypes()[0];
+				if (paramType.equals(getterType)) {
+					match = setter;
+					break;
+				}
+				if (exception == null) {
+					try {
+						match = pickBetterSetter(match, setter, propName);
+					} catch (ReflectionException e) {
+						match = null;
+						exception = e;
+					}
+				}
+			}
+			if (match == null) {
+				throw exception;
+			} else {
+				addSetMethod(propName, match);
+			}
+		}
+	}
+
+	private Method pickBetterSetter(Method setter1, Method setter2, String property) {
+		if (setter1 == null) {
+			return setter2;
+		}
+		Class<?> paramType1 = setter1.getParameterTypes()[0];
+		Class<?> paramType2 = setter2.getParameterTypes()[0];
+		if (paramType1.isAssignableFrom(paramType2)) {
+			return setter2;
+			
+		} else if (paramType2.isAssignableFrom(paramType1)) {
+			return setter1;
+		}
+		 throw new ReflectionException("Ambiguous setters defined for property '" + property + "' in class '"
+			        + setter2.getDeclaringClass() + "' with types '" + paramType1.getName() + "' and '"
+			        + paramType2.getName() + "'.");
+	}
+	
+	private void addSetMethod(String name, Method method) {
+		if (isValidPropertyName(name)) {
+			setMethods.put(name, new MethodInvoker(method));
+			Type[] paramTypes = TypeParameterResolver.resolveParamTypes(method, type);
+			setTypes.put(name, typeToClass(paramTypes[0]));
+		}
+	}
+	
+    private boolean isValidPropertyName(String name) {
+		return !(name.startsWith("$") || "serialVersionUID".equals(name) || "class".equals(name));
+	}	 
 
 	
+	private Class<?> typeToClass(Type src) {
+		Class<?> result = null;
+		if (src instanceof Class) {
+			result = (Class<?>) src;
+		} else if (src instanceof ParameterizedType) {
+			result = (Class<?>)((ParameterizedType) src).getRawType();
+		} else if (src instanceof GenericArrayType) {
+			Type componentType = ((GenericArrayType) src).getGenericComponentType();
+			if (componentType instanceof Class) {
+				result = Array.newInstance((Class<?>) componentType, 0).getClass();
+			} else {
+				Class<?> componentClass = typeToClass(componentType);
+				result = Array.newInstance((Class<?>) componentClass, 0).getClass();
+			}
+		}
+		if (result == null) {
+			 result = Object.class;
+		}
+		return result;
+	}
 	private static boolean canAccessPrivateMethods() {
 	    try {
 	      SecurityManager securityManager = System.getSecurityManager();
