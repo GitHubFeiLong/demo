@@ -2,8 +2,10 @@ package ssm.pojectTest.reflector;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.ReflectPermission;
 import java.lang.reflect.Type;
@@ -18,8 +20,10 @@ import java.util.Map.Entry;
 
 import org.apache.ibatis.reflection.ReflectionException;
 import org.apache.ibatis.reflection.TypeParameterResolver;
+import org.apache.ibatis.reflection.invoker.GetFieldInvoker;
 import org.apache.ibatis.reflection.invoker.Invoker;
 import org.apache.ibatis.reflection.invoker.MethodInvoker;
+import org.apache.ibatis.reflection.invoker.SetFieldInvoker;
 import org.apache.ibatis.reflection.property.PropertyNamer;
 
 /**
@@ -45,7 +49,7 @@ public class ReflectorTest {
 		addDefaultConstructor(clazz);
 		addGetMethods(clazz);
 		addSetMethods(clazz);
-//		addFields(clazz);
+		addFields(clazz);
 		readablePropertyNames = getMethods.keySet().toArray(new String[getMethods.keySet().size()]);
 		writeablePropertyNames = setMethods.keySet().toArray(new String [setMethods.keySet().size()] );
 		for (String propName : readablePropertyNames) {
@@ -254,6 +258,50 @@ public class ReflectorTest {
 		}
 		return result;
 	}
+	
+	private void addFields(Class<?> clazz) {
+		Field[] fields = clazz.getDeclaredFields();
+		for (Field field : fields) {
+			if (canAccessPrivateMethods()) {
+				try {
+					field.setAccessible(true);
+				} catch (Exception e) {
+					
+				}
+			}
+			if (field.isAccessible()) {
+				if (!setMethods.containsKey(field.getName())) {
+					int modifiers = field.getModifiers();
+					if (!(Modifier.isFinal(modifiers) && Modifier.isStatic(modifiers))) {
+						addSetField(field);
+					}
+				}
+				if (!getMethods.containsKey(field.getName())) {
+					addGetField(field);
+				}
+			}
+		}
+		if (clazz.getSuperclass() != null) {
+			addFields(clazz.getSuperclass());
+		}
+	}
+	
+	private void addSetField(Field field) {
+		if (isValidPropertyName(field.getName())) {
+			setMethods.put(field.getName(), new SetFieldInvoker(field));
+			Type fieldType = TypeParameterResolver.resolveFieldType(field, type);
+			setTypes.put(field.getName(), typeToClass(fieldType));
+		}
+	}
+	
+	private void addGetField (Field field) {
+		if (isValidPropertyName(field.getName())) {
+			getMethods.put(field.getName(), new GetFieldInvoker(field));
+			Type fieldType = TypeParameterResolver.resolveFieldType(field, type);
+			getTypes.put(field.getName(), typeToClass(fieldType));
+		}
+	}
+	
 	private static boolean canAccessPrivateMethods() {
 	    try {
 	      SecurityManager securityManager = System.getSecurityManager();

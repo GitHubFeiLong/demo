@@ -8,7 +8,7 @@
 		<price id="15">14.95</price>
 	</book>
 	<book year="2005">
-		<title>Burning Tower</title>
+		<title class="class">Burning Tower</title>
 		<author>Larry Niven</author>
 		<author>Neal Stephenson</author>
 		<publisher>Pocket</publisher>
@@ -16,11 +16,18 @@
 		<price>5.99</price>
 	</book>
 	<book year="1995">
-		<title>Zodiac</title>
+		<title zz="zz">Zodiac</title>
 		<author>Neal Stephenson</author>
 		<publisher>Spectra</publisher>
 		<isbn>0553573862</isbn>
 		<price>7.62</price>
 	</book>
 	<!-- more books -->
+	<date>Monday</date>
+	<date>Tuesday</date>
+	<date>Wednesday</date>
+	<date>Thursday</date>
+	<date>Friday</date>
+	<date>Saturday</date>
+	<date>Sunday</date>
 </books>

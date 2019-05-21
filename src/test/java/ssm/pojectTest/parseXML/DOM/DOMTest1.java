@@ -2,55 +2,60 @@ package ssm.pojectTest.parseXML.DOM;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import static java.lang.System.out;
+
+import java.io.File;
+import java.io.IOException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import com.sun.org.apache.xerces.internal.dom.ChildNode;
 
 public class DOMTest1 {
 	public static void main(String [] args) {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = null;
 		try {
-			DocumentBuilderFactory db = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = db.newDocumentBuilder();
-			Document document = builder.parse("src/test/java/ssm/pojectTest/parseXML/book.xml");
-			NodeList nodeList = document.getElementsByTagName("book");
-			// 循环根节点
-			for (int i = 0; i < nodeList.getLength(); i++) {
-				Node node = nodeList.item(i);
-				// 获取根节点的属性
-				NamedNodeMap map = node.getAttributes();
-				// 将根节点的元素遍历
-				for (int j = 0; j < map.getLength(); j++) {
-					System.out.println(map.item(j).getNodeName() + "||" + map.item(j).getNodeValue());
+			builder = factory.newDocumentBuilder();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Document document = null;
+		try {
+			File f = new File("src/test/java/ssm/pojectTest/parseXML/book.xml");
+			System.out.println("filename：" + f.getName());
+			document = builder.parse(f);
+			NodeList parentList = document.getElementsByTagName("book");
+			
+			for (int i = 0; i < parentList.getLength(); i++) {
+				
+				// 获取节点地属性
+				NamedNodeMap map = parentList.item(i).getAttributes();
+				for (int j = 0; j < map.getLength(); j ++) {
+					System.out.println(map.item(j).getNodeName()+"="+map.item(j).getNodeValue()+":"+map.item(j).getNodeType());
 				}
 				
-				//解析根节点的子节点
-				NodeList childList = node.getChildNodes();
-				
-				for (int j = 0; j < childList.getLength(); j++) {
-					Node childNode = childList.item(j);
-					
-					map = childNode.getAttributes();
-					if (map != null) {
-						for (int k = 0; k < map.getLength(); k++) {
-							out.println(map.item(k).getNodeName() + "\\" + map.item(k).getNodeValue());
-						}
+				NodeList childs = parentList.item(i).getChildNodes();
+				for (int j = 0; j < childs.getLength(); j ++) {
+					if (childs.item(j).getNodeType() == Node.ELEMENT_NODE) {
+						System.out.println(childs.item(j).getNodeName()+"=>"+childs.item(j).getTextContent());
 					}
-					
-					// 是元素节点
-					if (childNode.getNodeType() == Node.ELEMENT_NODE) {
-						out.println(childNode.getNodeName() + "=" + childNode.getTextContent());
-					}
-					
 				}
 				
 				
 			}
-		} catch(Exception e) {
-			System.out.println(e.getMessage());
+		} catch (SAXException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
 	}
 
 }
