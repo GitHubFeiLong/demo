@@ -7,6 +7,6 @@ import com.ssm.mf.domain.PageDemo;
 
 public interface PageService {
 
-	PageInfo<PageDemo> getPage(Integer page, Integer rows);
+	List<PageDemo> getPage(Integer page, Integer rows);
 
 }

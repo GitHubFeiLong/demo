@@ -22,10 +22,10 @@ public class PageController {
 	
 	@RequestMapping("/getPage")
 	@ResponseBody
-	public PageInfo<PageDemo> getPage(Integer page, Integer rows) {
+	public List getPage(Integer page, Integer rows) {
 		PageHelper.startPage(1,5);
-		PageInfo<PageDemo> list = service.getPage(page,rows);
+		List<PageDemo> list = service.getPage(page,rows);
         System.out.println(list);
-		return list;
+		return DataFormat.format(list);
 	}
 }

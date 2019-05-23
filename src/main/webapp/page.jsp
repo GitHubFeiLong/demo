@@ -33,16 +33,16 @@
    <!-- 新建一个form将请求得到的参数传递到下一个页面 -->
    
    <script>
-    /*  $.ajax({
+     $.ajax({
     	 url:"/ssm/getPage.do",
-    	 data:"",
-    	 type:"",
-    	 dataType:"",
+    	 /* data:"", */
+    	 type:"post",
+    	 dataType:"json",
     	 success:function(data){
     		 console.log(data);
     	 }
     	 
-     }); */
+     });
       $("#table").datagrid({
          url: '/ssm/getPage.do',//完整格式为{total:35,rows:[{a:1,b:2,c:3},{a:1,b:2,c:3},{a:1,b:2,c:3}],footer:[{'a':'统计',b:'',c:''}]},,,total为总共多少条数据，rows为表格要显示的数组对象，footer为行尾，默认不显示，如统计合计
          width:"100%",

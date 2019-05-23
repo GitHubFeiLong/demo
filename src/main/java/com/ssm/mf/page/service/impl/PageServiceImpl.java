@@ -13,6 +13,7 @@ import com.github.pagehelper.PageInfo;
 import com.ssm.mf.domain.PageDemo;
 import com.ssm.mf.page.dao.PageMapper;
 import com.ssm.mf.page.service.PageService;
+import com.ssm.mf.utils.DataFormat;
 
 @Service
 public class PageServiceImpl implements PageService{
@@ -21,15 +22,15 @@ public class PageServiceImpl implements PageService{
 	private PageMapper dao;
 	
 	@Override
-	public PageInfo<PageDemo> getPage(Integer current, Integer rows) {
+	public List<PageDemo> getPage(Integer current, Integer rows) {
 		Map map = new HashMap<Integer, Integer>();
 		map.put("currPage", current);
 		map.put("pageSize", rows);
 		
 		PageHelper.startPage(current, rows);
 		List list= dao.selectPageByPage(map);
-		PageInfo<PageDemo> pageInfo = new PageInfo<>(list);
-		return pageInfo;
+		System.out.println(list);
+		return list;
 	}
 
 }
