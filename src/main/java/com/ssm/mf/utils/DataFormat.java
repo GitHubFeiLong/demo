@@ -27,7 +27,7 @@ public class DataFormat {
 		Field[] fields = obj.getClass().getDeclaredFields();
 		Map<String, Object> map = new HashMap<String, Object>();
 		for (Field field : fields) {
-			String varName = field.getName();
+			String varName = field.getName().toLowerCase();
 			if (!field.isAccessible()) {
 				field.setAccessible(true);
 			}

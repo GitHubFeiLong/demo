@@ -1,10 +1,15 @@
 package com.ssm.mf.page.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.ssm.mf.domain.PageDemo;
 import com.ssm.mf.page.dao.PageMapper;
 import com.ssm.mf.page.service.PageService;
@@ -16,9 +21,15 @@ public class PageServiceImpl implements PageService{
 	private PageMapper dao;
 	
 	@Override
-	public List<PageDemo> getPage(Integer page, Integer rows) {
+	public PageInfo<PageDemo> getPage(Integer current, Integer rows) {
+		Map map = new HashMap<Integer, Integer>();
+		map.put("currPage", current);
+		map.put("pageSize", rows);
 		
-		return dao.selectPage(page, rows);
+		PageHelper.startPage(current, rows);
+		List list= dao.selectPageByPage(map);
+		PageInfo<PageDemo> pageInfo = new PageInfo<>(list);
+		return pageInfo;
 	}
 
 }
