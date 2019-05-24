@@ -35,7 +35,7 @@
    <script>
      $.ajax({
     	 url:"/ssm/getPage.do",
-    	 data:"page=10&rows=50",
+    	 data:"page=1&rows=50",
     	 type:"post",
     	 dataType:"json",
     	 success:function(data){

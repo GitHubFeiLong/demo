@@ -1,5 +1,6 @@
 package com.ssm.mf.page.web;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,13 +23,17 @@ public class PageController {
 	
 	@RequestMapping("/getPage")
 	@ResponseBody
-	public List getPage(Integer page, Integer rows) {
+	public Object getPage(Integer page, Integer rows) {
 		List<PageDemo> list = service.getPage(page,rows);
 		//得到分页的结果对象
 		PageInfo<PageDemo> personPageInfo = new PageInfo<>(list);
+		Map<String, Object> map = new HashMap<String, Object>();
 		//得到分页中的person条目对象
 	    List<PageDemo> pageList = personPageInfo.getList();
-        System.out.println(list);
-		return pageList;
+	    System.out.println("控制器" + list.size());
+	    System.out.println(personPageInfo.getTotal());
+        map.put("rows", list);
+        map.put("total", personPageInfo.getTotal());
+		return map;
 	}
 }

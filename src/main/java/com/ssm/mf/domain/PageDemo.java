@@ -26,5 +26,9 @@ public class PageDemo {
 	public void setAge(Integer age) {
 		this.age = age;
 	}
+	@Override
+	public String toString() {
+		return "PageDemo [id=" + id + ", name=" + name + ", age=" + age + "]";
+	}
 	 
 }

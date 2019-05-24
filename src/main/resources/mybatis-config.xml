@@ -8,6 +8,8 @@
 		typeHandlers?, objectFactory?,objectWrapperFactory?,
 		plugins?, environments?, databaseIdProvider?, mappers? -->
 
+	<!-- sql日志 -->
+	<setting value="STDOUT_LOGGING" name="logImpl"/>
 	<!-- 设置别名 -->
 	<typeAliases>
 		<package name="com.ssm.mf.domain" />

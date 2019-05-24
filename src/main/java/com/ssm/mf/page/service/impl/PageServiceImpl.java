@@ -26,7 +26,6 @@ public class PageServiceImpl implements PageService{
 		Map map = new HashMap<Integer, Integer>();
 		PageHelper.startPage(current, rows);
 		List list= dao.selectPageByPage(map);
-		System.out.println(list);
 		return list;
 	}
 
