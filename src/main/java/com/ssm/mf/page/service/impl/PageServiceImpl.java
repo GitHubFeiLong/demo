@@ -24,9 +24,6 @@ public class PageServiceImpl implements PageService{
 	@Override
 	public List<PageDemo> getPage(Integer current, Integer rows) {
 		Map map = new HashMap<Integer, Integer>();
-		map.put("currPage", current);
-		map.put("pageSize", rows);
-		
 		PageHelper.startPage(current, rows);
 		List list= dao.selectPageByPage(map);
 		System.out.println(list);

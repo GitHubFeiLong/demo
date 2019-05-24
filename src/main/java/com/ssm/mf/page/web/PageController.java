@@ -23,9 +23,12 @@ public class PageController {
 	@RequestMapping("/getPage")
 	@ResponseBody
 	public List getPage(Integer page, Integer rows) {
-		PageHelper.startPage(1,5);
 		List<PageDemo> list = service.getPage(page,rows);
+		//得到分页的结果对象
+		PageInfo<PageDemo> personPageInfo = new PageInfo<>(list);
+		//得到分页中的person条目对象
+	    List<PageDemo> pageList = personPageInfo.getList();
         System.out.println(list);
-		return DataFormat.format(list);
+		return pageList;
 	}
 }
