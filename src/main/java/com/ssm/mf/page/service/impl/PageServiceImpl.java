@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ssm.mf.domain.PageDemo;
+import com.ssm.mf.domain.StudentSqlserver;
 import com.ssm.mf.page.dao.PageMapper;
 import com.ssm.mf.page.service.PageService;
 import com.ssm.mf.utils.DataFormat;
@@ -27,6 +28,20 @@ public class PageServiceImpl implements PageService{
 		PageHelper.startPage(current, rows);
 		List list= dao.selectPageByPage(map);
 		return list;
+	}
+
+	@Override
+	public void addStudent(List<StudentSqlserver> list) {
+		dao.insertStudent(list);
+		
+	}
+
+	@Override
+	public List<StudentSqlserver> listStudentSqlserver(Integer page, Integer rows) {
+		// TODO Auto-generated method stub
+		PageHelper.startPage(page, rows);
+		
+		return dao.selectAllStudent();
 	}
 
 }

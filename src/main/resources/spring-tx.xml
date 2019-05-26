@@ -12,11 +12,14 @@
 
     <!-- 开启AOP注解扫描 -->
     <aop:aspectj-autoproxy proxy-target-class="true" />
+    
+    <aop:aspectj-autoproxy />
+    
 	<context:component-scan base-package="com.ssm"/>
 	
     <!-- 事务管理器，依赖于数据源 -->
     <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource" />
+        <property name="dataSource" ref="dynamicDataSource" />
     </bean>
     
     <!-- 编写通知：对事务进行增强（通知），需要编写对切入点和具体执行事务细节 -->
@@ -40,4 +43,12 @@
         <!-- 切面：整合切入点和通知 -->
         <aop:advisor advice-ref="txAdvice" pointcut="within(con.ssm.mf..*)" />
     </aop:config>
+    
+     <!-- 启动@aspectj的自动代理支持-->
+    <aop:aspectj-autoproxy />
+
+    <!-- 定义目标对象 -->
+    <bean id="userDaos" class="ssm.aop.UserDaoImp" />
+    <!-- 定义aspect类 -->
+    <bean name="myAspectJ" class="ssm.aop.MyAspect"/>
 </beans>

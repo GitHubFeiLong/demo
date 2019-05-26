@@ -15,8 +15,9 @@
 	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location" value="classpath:jdbc.properties" />
 	</bean>
- 
-	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+	
+ 	<!-- MySQL -->
+	<bean id="mysqlDataSource" class="com.alibaba.druid.pool.DruidDataSource">
 		<property name="driverClassName" value="${jdbc.mysql.driver}"></property>
 	    <property name="url" value="${jdbc.mysql.url}"></property>	                             
 		<property name="username" value="${jdbc.mysql.username}"></property>
@@ -27,9 +28,32 @@
 		<property name="maxWait" value="${maxWait}"></property> 
 	</bean>
  
+ 	<!-- SQLServer -->
+ 	<bean id="sqlserverDataSource" class="com.alibaba.druid.pool.DruidDataSource">
+		<property name="driverClassName" value="${jdbc.sqlserver.driver}"></property>
+	    <property name="url" value="${jdbc.sqlserver.url}"></property>	                             
+		<property name="username" value="${jdbc.sqlserver.username}"></property>
+		<property name="password" value="${jdbc.sqlserver.password}"></property> 
+		<property name="initialSize" value="${initialSize}"></property>
+	    <property name="maxActive" value="${maxActive}"></property>	                             
+		<property name="minIdle" value="${minIdle}"></property>
+		<property name="maxWait" value="${maxWait}"></property> 
+	</bean>
+ 	
+ 	<!-- 动态数据源 -->
+  	<bean id="dynamicDataSource" class="com.ssm.mf.utils.DynamicDataSource">
+ 		<property name="targetDataSources">
+ 			<map key-type="java.lang.String">
+ 				<entry key="mysqlDataSource" value-ref="mysqlDataSource"></entry>
+ 				<entry key="sqlserverDataSource" value-ref="sqlserverDataSource"></entry>
+ 			</map>
+ 		</property>
+ 		<property name="defaultTargetDataSource" ref="mysqlDataSource"></property>
+ 	</bean>
+ 	
 	<!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
+		<property name="dataSource" ref="dynamicDataSource" />
 		<!-- 自动扫描mapping.xml文件 -->
 		<property name="mapperLocations" value="classpath:com/ssm/mf/mapper/*.xml"></property>
 		<property name="typeAliasesPackage" value="com.mf.beans" />
@@ -43,8 +67,8 @@
 	</bean>
  
 	<!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
+	<!-- <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dynamic_dataSource" />
+	</bean> -->
  
 </beans> 

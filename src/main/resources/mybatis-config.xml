@@ -7,18 +7,21 @@
 		顺序如下: properties?, settings?, typeAliases?, 
 		typeHandlers?, objectFactory?,objectWrapperFactory?,
 		plugins?, environments?, databaseIdProvider?, mappers? -->
-
-	<!-- sql日志 -->
-	<setting value="STDOUT_LOGGING" name="logImpl"/>
+	
+	<settings>
+		<!-- sql日志 -->
+		<setting value="STDOUT_LOGGING" name="logImpl"/>
+	</settings>
+	
 	<!-- 设置别名 -->
 	<typeAliases>
 		<package name="com.ssm.mf.domain" />
 	</typeAliases>
 	<!-- 配置分页插件 -->
-    <plugins>
+    <!-- <plugins>
         <plugin interceptor="com.github.pagehelper.PageInterceptor">
-            <!-- 设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库-->
+            设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库
             <property name="helperDialect" value="Mysql"/>
         </plugin>
-    </plugins>
+    </plugins> -->
 </configuration>

@@ -8,4 +8,18 @@
 		select id,name,age from page  ORDER BY id
 	</select>
 	
+	<!-- void insertStudent(List<StudentSqlserver> list); -->
+	<insert id="insertStudent" parameterType="list">
+		insert into Student (name, age, address) values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+				#{item.name},#{item.age},#{item.address}
+			)
+		</foreach>
+	</insert>
+	
+	<!-- List<StudentSqlserver> selectAllStudent(); -->
+	<select id="selectAllStudent" resultType="studentSqlserver">
+		select * from student
+	</select>
 </mapper>
