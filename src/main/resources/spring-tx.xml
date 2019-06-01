@@ -10,9 +10,6 @@
         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <!-- 开启AOP注解扫描 -->
-    <aop:aspectj-autoproxy proxy-target-class="true" />
-    
     <aop:aspectj-autoproxy />
     
 	<context:component-scan base-package="com.ssm"/>
@@ -38,17 +35,4 @@
         </tx:attributes>
     </tx:advice>
     
-    <!-- 设置AOP，让Spring自动对目标生成代理，需要使用AspectJ表达式 -->
-    <aop:config proxy-target-class="true">
-        <!-- 切面：整合切入点和通知 -->
-        <aop:advisor advice-ref="txAdvice" pointcut="within(con.ssm.mf..*)" />
-    </aop:config>
-    
-     <!-- 启动@aspectj的自动代理支持-->
-    <aop:aspectj-autoproxy />
-
-    <!-- 定义目标对象 -->
-    <bean id="userDaos" class="ssm.aop.UserDaoImp" />
-    <!-- 定义aspect类 -->
-    <bean name="myAspectJ" class="ssm.aop.MyAspect"/>
 </beans>
