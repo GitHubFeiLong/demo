@@ -5,6 +5,17 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
 	
+ 	<properties>
+		<!-- 插件 -->
+		<compiler.version>2.5.1</compiler.version>
+		<jetty.version>9.3.14.v20161028</jetty.version>
+		<jetty.port>8080</jetty.port>
+		<jetty.contextPath>/power-supervision</jetty.contextPath>
+		<!-- 其它配置 -->
+		<jdk.version>1.8</jdk.version>
+		<encoding>UTF-8</encoding>
+	</properties>
+	
   <dependencies>
   		<!-- 测试 -->
 		<dependency>
@@ -262,4 +273,35 @@
 		</dependency>
         
 	</dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<!-- maven-compiler-plugin -->
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${compiler.version}</version>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+					<encoding>${encoding}</encoding>
+				</configuration>
+			</plugin>
+
+			<!-- jetty-maven-plugin -->
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>${jetty.version}</version>
+				<configuration>
+					<httpConnector>
+						<port>${jetty.port}</port>
+					</httpConnector>
+					<webApp>
+						<contextPath>${jetty.contextPath}</contextPath>
+					</webApp>
+					<scanIntervalSeconds>1</scanIntervalSeconds>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

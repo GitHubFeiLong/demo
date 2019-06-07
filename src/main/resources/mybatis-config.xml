@@ -2,26 +2,44 @@
 <!DOCTYPE configuration
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
+  
 <configuration>
-	<!-- plugins在配置文件中的位置必须符合要求，否则会报错，
-		顺序如下: properties?, settings?, typeAliases?, 
-		typeHandlers?, objectFactory?,objectWrapperFactory?,
-		plugins?, environments?, databaseIdProvider?, mappers? -->
-	
+	<!-- plugins在配置文件中的位置必须符合要求，否则会报错， 顺序如下: properties?, settings?, typeAliases?, 
+		typeHandlers?, objectFactory?,objectWrapperFactory?, plugins?, environments?, 
+		databaseIdProvider?, mappers? -->
+
 	<settings>
 		<!-- sql日志 -->
-		<setting value="STDOUT_LOGGING" name="logImpl"/>
+		<setting value="STDOUT_LOGGING" name="logImpl" />
 	</settings>
-	
+
 	<!-- 设置别名 -->
 	<typeAliases>
 		<package name="com.ssm.mf.domain" />
 	</typeAliases>
 	<!-- 配置分页插件 -->
-    <!-- <plugins>
-        <plugin interceptor="com.github.pagehelper.PageInterceptor">
-            设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库
-            <property name="helperDialect" value="Mysql"/>
-        </plugin>
-    </plugins> -->
+	<!-- <plugins> <plugin interceptor="com.github.pagehelper.PageInterceptor"> 
+		设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库 <property name="helperDialect" 
+		value="Mysql"/> </plugin> </plugins> -->
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="com.mysql.jdbc.Driver" />
+				<property name="url" value="jdbc:mysql:/localhost:3306/ssm" />
+				<property name="username" value="root" />
+				<property name="password" value="123456" />
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<!-- 第一种：使用相对路径进行配置。示例代码如下： -->
+		<!-- <mapper resource="org/mybatis/mappers/UserMapper.xml"/> -->
+		<!-- 第二种：使用绝对路径进行配置。示例代码如下： -->
+		<!-- <mapper url="file:///var/mappers/UserMapper.xml"/> -->
+		<!-- 第三种：使用接口信息进行配置。示例代码如下： -->
+		<!-- <mapper class="org.mybatis.mappers.UserMapper"/> -->
+		<!-- 使用接口所在包进行配置。示例如下： -->
+		<package name="com.ssm.mf" />
+	</mappers>
 </configuration>
