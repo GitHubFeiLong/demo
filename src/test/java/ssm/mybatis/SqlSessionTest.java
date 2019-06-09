@@ -9,7 +9,6 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-import com.ssm.mf.page.dao.PageMapper;
 import com.ssm.mf.uploadfile.dao.FileMapper;
 
 public class SqlSessionTest {
