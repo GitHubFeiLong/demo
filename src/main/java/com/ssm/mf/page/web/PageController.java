@@ -37,7 +37,6 @@ public class PageController {
 		//得到分页中的person条目对象
 	    List<PageDemo> pageList = personPageInfo.getList();
 	    System.out.println("控制器" + list.size());
-	    System.out.println(personPageInfo.getTotal());
         map.put("rows", list);
         map.put("total", personPageInfo.getTotal());
 		return map;
