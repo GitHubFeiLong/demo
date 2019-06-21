@@ -271,8 +271,44 @@
 			<artifactId>pagehelper</artifactId>
 			<version>5.1.8</version>
 		</dependency>
-        
-	</dependencies>
+	  <dependency>
+		  <groupId>junit</groupId>
+		  <artifactId>junit</artifactId>
+		  <version>4.12</version>
+		  <scope>compile</scope>
+	  </dependency>
+	  <dependency>
+		  <groupId>org.junit.jupiter</groupId>
+		  <artifactId>junit-jupiter-api</artifactId>
+		  <version>RELEASE</version>
+		  <scope>compile</scope>
+	  </dependency>
+
+	  <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+	  <dependency>
+		  <groupId>com.google.guava</groupId>
+		  <artifactId>guava</artifactId>
+		  <version>27.0.1-jre</version>
+	  </dependency>
+
+
+	  <!--  jedis  -->
+	  <!--  https://mvnrepository.com/artifact/redis.clients/jedis  -->
+	  <dependency>
+		  <groupId>redis.clients</groupId>
+		  <artifactId>jedis</artifactId>
+		  <version>2.7.3</version>
+	  </dependency>
+	  <!--  spring-data-redis  -->
+	  <!--  https://mvnrepository.com/artifact/org.springframework.data/spring-data-redis  -->
+	  <dependency>
+		  <groupId>org.springframework.data</groupId>
+		  <artifactId>spring-data-redis</artifactId>
+		  <version>1.6.1.RELEASE</version>
+	  </dependency>
+
+
+  </dependencies>
 	
 	<build>
 		<plugins>
@@ -303,5 +339,17 @@
 				</configuration>
 			</plugin>
 		</plugins>
+			<finalName>test</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.properties</include>
+					<include>**/*.xml</include>
+					<include>**/*.tld</include>
+				</includes>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
 	</build>
 </project>
