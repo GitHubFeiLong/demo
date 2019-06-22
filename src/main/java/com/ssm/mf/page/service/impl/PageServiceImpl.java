@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
@@ -21,9 +22,12 @@ public class PageServiceImpl implements PageService{
 
 	@Autowired
 	private PageMapper dao;
-	
+
+	//  @Cacheable(value = "redisCacheManager",key="'redis_role_'+#id")
 	@Override
+	@Cacheable(value = "redisCacheManager",key="'getPage' + #current + '_' + #rows")
 	public List<PageDemo> getPage(Integer current, Integer rows) {
+		System.out.println("进入service");
 		Map map = new HashMap<Integer, Integer>();
 		PageHelper.startPage(current, rows);
 		List list= dao.selectPageByPage(map);

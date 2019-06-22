@@ -44,6 +44,7 @@ public class MethodCacheInterceptor implements MethodInterceptor {
 	 * @Return
 	 */
 	public MethodCacheInterceptor() {
+		System.out.println("进入了MethodCacheInterceptor，MethodCacheInterceptor钩爪方法");
 		try{
 			String[] targetNames = {};
 			String[] methodNames = {};

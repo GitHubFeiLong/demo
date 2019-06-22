@@ -2,8 +2,10 @@ package com.ssm.mf.domain;
 
 import org.apache.ibatis.type.Alias;
 
+import java.io.Serializable;
+
 @Alias("pageDemo")
-public class PageDemo {
+public class PageDemo implements Serializable {
 
 	private Integer id;
 	private String name;

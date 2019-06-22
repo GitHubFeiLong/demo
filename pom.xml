@@ -179,13 +179,12 @@
 		    <scope>runtime</scope>
 		</dependency>
 		<!-- mysql -->
-		<dependency>
-	       <groupId>mysql</groupId>
-	       <artifactId>mysql-connector-java</artifactId>
-	       <version>5.1.18</version>
-	       <scope>compile</scope>
-	   </dependency>
-		<!-- c3p0数据库连接池-->
+	  <dependency>
+		  <groupId>mysql</groupId>
+		  <artifactId>mysql-connector-java</artifactId>
+		  <version>8.0.11</version>
+	  </dependency>
+	  <!-- c3p0数据库连接池-->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
@@ -339,7 +338,8 @@
 				</configuration>
 			</plugin>
 		</plugins>
-			<finalName>test</finalName>
+		<!--将mapper文件编译-->
+		<finalName>test</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/java</directory>
