@@ -2,6 +2,7 @@ package ssm.redis;
 
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import redis.clients.jedis.Jedis;
 
 /**
  * @ClassName RedisDemo
@@ -12,7 +13,10 @@ import org.springframework.data.redis.core.RedisTemplate;
  */
 public class RedisDemo {
 	public static void main(String[] args) {
-		String boundKey = "key1";
-//		BoundValueOperations<String, String> ops = stringRedisTemplate.
+		Jedis jedis = new Jedis("127.0.0.1", 6379);
+		//权限认证
+		//jedis.auth("123456");
+		jedis.set("lisonLength", "3");
+		jedis.close();
 	}
 }
