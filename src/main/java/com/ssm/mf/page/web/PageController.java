@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import com.ssm.mf.aop.before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,7 @@ public class PageController {
 	
 	@RequestMapping("/getPage")
 	@ResponseBody
+	@before
 	public Object getPage(Integer page, Integer rows) {
 		DataSourceContextHolder.clearDBType();
 		List<PageDemo> list = service.getPage(page,rows);
