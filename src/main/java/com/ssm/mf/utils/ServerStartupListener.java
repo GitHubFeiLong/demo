@@ -16,6 +16,7 @@ import javax.servlet.ServletContextListener;
 public class ServerStartupListener implements ServletContextListener{
 
 
+	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		
 		// 将web应用名称（路径）保存到application范围中
@@ -25,7 +26,7 @@ public class ServerStartupListener implements ServletContextListener{
 		
 	}
 
-
+	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		// TODO Auto-generated method stub
 		

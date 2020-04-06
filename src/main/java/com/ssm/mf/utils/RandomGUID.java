@@ -7,6 +7,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;  
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 /**
  * 生成GUID
@@ -17,8 +19,7 @@ import org.springframework.stereotype.Component;
  */
 @Component 
 public class RandomGUID extends Object {  
-   protected final org.apache.commons.logging.Log logger = org.apache.commons.logging.LogFactory  
-      .getLog(getClass());  
+   private static final Logger logger = LoggerFactory.getLogger(RandomGUID.class);
   
    public String valueBeforeMD5 = "";  
    public String valueAfterMD5 = "";  
@@ -78,8 +79,8 @@ public class RandomGUID extends Object {
       try {  
          md5 = MessageDigest.getInstance("MD5");  
       } catch (NoSuchAlgorithmException e) {  
-         logger.error("Error: " + e);  
-      }  
+         logger.error("Error: " + e);
+      }
   
       try {  
          long time = System.currentTimeMillis();  
@@ -103,15 +104,16 @@ public class RandomGUID extends Object {
          StringBuffer sb = new StringBuffer(32);  
          for (int j = 0; j < array.length; ++j) {  
             int b = array[j] & TWO_BYTES;  
-            if (b < PAD_BELOW)  
-               sb.append('0');  
-            sb.append(Integer.toHexString(b));  
+            if (b < PAD_BELOW) {
+               sb.append('0');
+            }
+            sb.append(Integer.toHexString(b));
          }  
   
          valueAfterMD5 = sb.toString();  
   
       } catch (Exception e) {  
-         logger.error("Error:" + e);  
+         logger.error("Error:" + e);
       }  
    }  
   
@@ -119,7 +121,8 @@ public class RandomGUID extends Object {
     * Convert to the standard format for GUID 
     * (Useful for SQL Server UniqueIdentifiers, etc.) 
     * Example: C2FEEEAC-CFCD-11D1-8B05-00600806D9B6 
-    */  
+    */
+   @Override
    public String toString() {  
       String raw = valueAfterMD5.toUpperCase();  
       StringBuffer sb = new StringBuffer(64);  

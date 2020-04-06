@@ -2,7 +2,7 @@ package com.ssm.mf.aop;
 
 import java.lang.reflect.Proxy;
 
-import org.junit.Test;
+//import org.junit.Test;
 
 /**
  * 测试jdk动态代理
@@ -10,7 +10,7 @@ import org.junit.Test;
  */
 public class TestJDKProxy {
   
- @Test
+// @Test
  public void testSave(){
   /**
    * 1、创建一个目标对象

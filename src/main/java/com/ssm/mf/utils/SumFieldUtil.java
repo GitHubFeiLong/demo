@@ -1,9 +1,5 @@
 package com.ssm.mf.utils;
 
-/**
- * 
- */
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -11,22 +7,22 @@ import java.util.List;
 /**
  * 通过集合，和泛型全称，返回集合中相同字段的求和，返回一个Number[],Number[]的索引就是集合泛型对象字段的索引。
  * @ClassName: SumField
- * @Description:TODO	
+ * @Description:TODO
  * @author: cfl
  * @date: 2019年6月5日 下午1:13:30
  */
 public class SumFieldUtil {
 	/**
 	 * 将结果计算并赋值给对象
-	 * @Title: getObject   
-	 * @Description: TODO()   
-	 * @param:      
-	 * @return: Object      
+	 * @Title: getObject
+	 * @Description: TODO()
+	 * @param:
+	 * @return: Object
 	 * @throws
 	 */
 	public static <T> Object getObject(List<T> list, Object obj) {
 		try {
-			Number [] nums = sum( list, obj); 
+			Number [] nums = sum( list, obj);
 			Class<?> clazz = obj.getClass();
 			Object o = clazz.newInstance();
 			Field [] fields = clazz.getDeclaredFields();
@@ -40,15 +36,17 @@ public class SumFieldUtil {
 					continue;
 				}
 				fields[i].setAccessible(true);
-				// 默认nums中存放的Integer类型。
+				//Double
 				if (Double.class.isAssignableFrom(fields[i].getType())) {
 					fields[i].set(o, Double.parseDouble(nums[i].toString()));
 					continue;
 				}
+				//Long
 				if (Long.class.isAssignableFrom(fields[i].getType())) {
 					fields[i].set(o, Long.parseLong(nums[i].toString()));
 					continue;
 				}
+				// 默认nums中存放的Integer类型。
 				fields[i].set(o, nums[i]);
 			}
 			return o;
@@ -65,26 +63,24 @@ public class SumFieldUtil {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
-	 * 
-	 * @Title: sum   
-	 * @Description: TODO()   
-	 * @param:   list:需要计算的集合   
-	 * @param:	 clazzName：list的泛型
+	 *
+	 * @Title: sum
+	 * @Description: TODO()
+	 * @param:   list:需要计算的集合
+	 * @param:	 object：获取需要处理的对象的Class对象
 	 * @return: Number[] list的泛型类中由Number类型或子类型修饰的字段求和。
-	  * 字段类型为Number的计算值，不是Number类型的字段，该字段在泛型类的Files[]的索引为index，那么
-	 *对应位置的Number[index] = null;    
+	 * 字段类型为Number的计算值，不是Number类型的字段，该字段在泛型类的Files[]的索引为index，那么
+	 *对应位置的Number[index] = null;
 	 * @throws
 	 */
 	private static <T> Number[] sum(List<T> list, Object object) throws Exception {
 		Class<?> clazz = object.getClass();
-		// 根据类名，实例化一个对象，用于存储数据总和
-		Object obj = object;
-		
+
 		Field[] clazzFileds = clazz.getDeclaredFields();
 		Number [] nums = new Number[clazzFileds.length];
 		// 初始每个元素为0
@@ -98,26 +94,26 @@ public class SumFieldUtil {
 			for (int i = 0; i < clazzFileds.length; i++) {
 				// System.out.println(clazzFileds[i].getName());
 				clazzFileds[i].setAccessible(true);
-				
+
 				// 如果不是Number类型的字段，跳过
 				if (!Number.class.isAssignableFrom(clazzFileds[i].getType())) {
 					nums[i] = null;
 					continue;
-				} 
+				}
 				// 字段对应的getter()的值
 				Number n =  (Number)clazzFileds[i].get(t);
 				if (n != null) {
 					// 相当于 nums[i] += n;
 					nums[i] = SumFieldUtil.getValue(n, nums[i], getType(n));
 				}
-				
-			}	
+
+			}
 		}
-		
+
 		return nums;
 	}
-	
-	
+
+
 
 	/**
 	 * 将Number类型转换为基本数据类型 @Title: getType @Description: TODO() @param: @return:
@@ -175,18 +171,18 @@ public class SumFieldUtil {
 	// double
 	private static Number sum(double n1, Number n2, String n2Name) {
 		switch (n2Name) {
-		case "java.lang.Double":
-			return n1 + (Double) (n2);
-		case "java.lang.Float":
-			return n1 + (Float) (n2);
-		case "java.lang.Long":
-			return n1 + (Long) (n2);
-		case "java.lang.Integer":
-			return n1 + (Integer) (n2);
-		case "java.lang.Short":
-			return n1 + (Short) (n2);
-		case "java.lang.Byte":
-			return n1 + (Byte) (n2);
+			case "java.lang.Double":
+				return n1 + (Double) (n2);
+			case "java.lang.Float":
+				return n1 + (Float) (n2);
+			case "java.lang.Long":
+				return n1 + (Long) (n2);
+			case "java.lang.Integer":
+				return n1 + (Integer) (n2);
+			case "java.lang.Short":
+				return n1 + (Short) (n2);
+			case "java.lang.Byte":
+				return n1 + (Byte) (n2);
 		}
 		return null;
 	}
@@ -194,18 +190,18 @@ public class SumFieldUtil {
 	// float
 	private static Number sum(float n1, Number n2, String n2Name) {
 		switch (n2Name) {
-		case "java.lang.Double":
-			return n1 + (Double) (n2);
-		case "java.lang.Float":
-			return n1 + (Float) (n2);
-		case "java.lang.Long":
-			return n1 + (Long) (n2);
-		case "java.lang.Integer":
-			return n1 + (Integer) (n2);
-		case "java.lang.Short":
-			return n1 + (Short) (n2);
-		case "java.lang.Byte":
-			return n1 + (Byte) (n2);
+			case "java.lang.Double":
+				return n1 + (Double) (n2);
+			case "java.lang.Float":
+				return n1 + (Float) (n2);
+			case "java.lang.Long":
+				return n1 + (Long) (n2);
+			case "java.lang.Integer":
+				return n1 + (Integer) (n2);
+			case "java.lang.Short":
+				return n1 + (Short) (n2);
+			case "java.lang.Byte":
+				return n1 + (Byte) (n2);
 		}
 		return null;
 	}
@@ -213,18 +209,18 @@ public class SumFieldUtil {
 	// long
 	private static Number sum(long n1, Number n2, String n2Name) {
 		switch (n2Name) {
-		case "java.lang.Double":
-			return n1 + (Double) (n2);
-		case "java.lang.Float":
-			return n1 + (Float) (n2);
-		case "java.lang.Long":
-			return n1 + (Long) (n2);
-		case "java.lang.Integer":
-			return n1 + (Integer) (n2);
-		case "java.lang.Short":
-			return n1 + (Short) (n2);
-		case "java.lang.Byte":
-			return n1 + (Byte) (n2);
+			case "java.lang.Double":
+				return n1 + (Double) (n2);
+			case "java.lang.Float":
+				return n1 + (Float) (n2);
+			case "java.lang.Long":
+				return n1 + (Long) (n2);
+			case "java.lang.Integer":
+				return n1 + (Integer) (n2);
+			case "java.lang.Short":
+				return n1 + (Short) (n2);
+			case "java.lang.Byte":
+				return n1 + (Byte) (n2);
 		}
 		return null;
 	}
@@ -232,18 +228,18 @@ public class SumFieldUtil {
 	// int
 	private static Number sum(int n1, Number n2, String n2Name) {
 		switch (n2Name) {
-		case "java.lang.Double":
-			return n1 + (Double) (n2);
-		case "java.lang.Float":
-			return n1 + (Float) (n2);
-		case "java.lang.Long":
-			return n1 + (Long) (n2);
-		case "java.lang.Integer":
-			return n1 + (Integer) (n2);
-		case "java.lang.Short":
-			return n1 + (Short) (n2);
-		case "java.lang.Byte":
-			return n1 + (Byte) (n2);
+			case "java.lang.Double":
+				return n1 + (Double) (n2);
+			case "java.lang.Float":
+				return n1 + (Float) (n2);
+			case "java.lang.Long":
+				return n1 + (Long) (n2);
+			case "java.lang.Integer":
+				return n1 + (Integer) (n2);
+			case "java.lang.Short":
+				return n1 + (Short) (n2);
+			case "java.lang.Byte":
+				return n1 + (Byte) (n2);
 		}
 		return null;
 	}
@@ -251,18 +247,18 @@ public class SumFieldUtil {
 	// short
 	private static Number sum(short n1, Number n2, String n2Name) {
 		switch (n2Name) {
-		case "java.lang.Double":
-			return n1 + (Double) (n2);
-		case "java.lang.Float":
-			return n1 + (Float) (n2);
-		case "java.lang.Long":
-			return n1 + (Long) (n2);
-		case "java.lang.Integer":
-			return n1 + (Integer) (n2);
-		case "java.lang.Short":
-			return n1 + (Short) (n2);
-		case "java.lang.Byte":
-			return n1 + (Byte) (n2);
+			case "java.lang.Double":
+				return n1 + (Double) (n2);
+			case "java.lang.Float":
+				return n1 + (Float) (n2);
+			case "java.lang.Long":
+				return n1 + (Long) (n2);
+			case "java.lang.Integer":
+				return n1 + (Integer) (n2);
+			case "java.lang.Short":
+				return n1 + (Short) (n2);
+			case "java.lang.Byte":
+				return n1 + (Byte) (n2);
 		}
 		return null;
 	}
@@ -270,18 +266,18 @@ public class SumFieldUtil {
 	// byte
 	private static Number sum(byte n1, Number n2, String n2Name) {
 		switch (n2Name) {
-		case "java.lang.Double":
-			return n1 + (Double) (n2);
-		case "java.lang.Float":
-			return n1 + (Float) (n2);
-		case "java.lang.Long":
-			return n1 + (Long) (n2);
-		case "java.lang.Integer":
-			return n1 + (Integer) (n2);
-		case "java.lang.Short":
-			return n1 + (Short) (n2);
-		case "java.lang.Byte":
-			return n1 + (Byte) (n2);
+			case "java.lang.Double":
+				return n1 + (Double) (n2);
+			case "java.lang.Float":
+				return n1 + (Float) (n2);
+			case "java.lang.Long":
+				return n1 + (Long) (n2);
+			case "java.lang.Integer":
+				return n1 + (Integer) (n2);
+			case "java.lang.Short":
+				return n1 + (Short) (n2);
+			case "java.lang.Byte":
+				return n1 + (Byte) (n2);
 		}
 		return null;
 	}
