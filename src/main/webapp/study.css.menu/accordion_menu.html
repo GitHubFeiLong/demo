@@ -1,0 +1,179 @@
+<!--手风琴下拉菜单。使用 transition 动画效果-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>下拉菜单</title>
+    <script src="D:\workspaces\idea\demo\src\main\webapp\Content\js\jquery.min.js"></script>
+    <style>
+        
+        body{
+            background:rgba(241, 239, 242, 1);
+        }
+
+        :root{
+            --menu_one_level_height:60px;
+            --menu_two_level_height:60px;
+        }
+
+        /* 菜单总容器 */
+        #menu_div{
+            width: 318px;
+            height: 1080px;
+            background:rgba(255,255,255,1);
+        }
+        
+        /* 一级菜单 */
+        #menu_div .menu_one_level{
+            width:100%;
+            height:var(--menu_one_level_height);
+            cursor:pointer;
+        }
+        #menu_div .menu_one_level div{
+            height: 100%;
+            width: 100%;
+            text-align: center;
+            line-height: var(--menu_one_level_height);
+            background:rgba(255,255,255,1);
+        }
+
+        /* 二级菜单 */
+        #menu_div .menu_two_level{
+            width:100%;
+            height:180px; /*这里使用固定值，不能使用auto，不然动画时会显示异常；在js里进行动态赋值*/
+            background:rgba(19, 108, 234, 1);
+            height: 0; 
+            position: relative;
+            overflow: hidden;
+            border-radius:0px 0px 5px 5px;
+            transition: height 0.4s;
+        }
+        #menu_div .menu_two_level div{
+            width:100%;
+            height:var(--menu_two_level_height);
+            text-align: center;
+            line-height: var(--menu_two_level_height);
+        }
+
+        /* 一级菜单点击（打开/关闭）样式不一样 (注意css优先级问题) */
+        #menu_div .menu-open-style div{
+            background-color:red;
+        }
+        #menu_div .menu-close-style div{
+            background-color:rgba(255,255,255,1);
+        }
+
+    </style>
+</head>
+<body>
+    <!-- 菜单栏容器 -->
+    <div id="menu_div">
+        <div class="menu_one_level" display="true">
+            <div>一级菜单</div>
+        </div>
+        <div class="menu_two_level">
+            <div>二级菜单</div>
+            <div>二级菜单</div>
+            <div>二级菜单</div> 
+        </div>
+
+        <!-- .... -->
+        <div class="menu_one_level" display="false">
+            <div>一级菜单</div>
+        </div>
+        <div class="menu_two_level">
+            <div>二级菜单</div>
+            <div>二级菜单</div>
+            <div>二级菜单</div> 
+        </div>
+        <div class="menu_one_level" display="false">
+            <div>一级菜单</div>
+        </div>
+        <div class="menu_two_level">
+            <div>二级菜单</div>
+            <div>二级菜单</div>
+            <div>二级菜单</div> 
+        </div>
+        <!-- ... -->
+    </div>
+
+    <script>
+        /*二级菜单一行高 60px*/
+        var twoMenuHeight = 60;
+
+         // 初始函数
+        $(function(){
+            // 第一个一级菜单的背景颜色
+            
+
+            // 第一个一级菜单，它的二级菜单个数
+            let len =  $("#menu_div").children("div:first-child").next().children("div").length;
+            // 第一个一级菜单，它的二级菜单地总高度
+            let showHeight = len * twoMenuHeight;
+            // 设置 第一个一级菜单，它的二级菜单的高度（让它显示出来） 
+            $("#menu_div").children("div:first-child").next().css("height", `${showHeight}px`);
+            $("#menu_div").children("div:first-child").addClass("menu-open-style");
+        })
+        
+    </script>
+    <script>
+        /**
+          * 一级菜单添加点击事件 
+          */
+          $("#menu_div").on('click',".menu_one_level",function(){
+            // 点击地以及菜单显示隐藏状态？
+            let display = $(this).attr("display") === "false" ? false : true;
+            // 二级菜单已经显示，就不执行操作
+            if(display){
+                return false;
+            }
+            // 关闭其它一级菜单
+            closeTowMenu(".menu_one_level");
+
+            // 改变属性
+            display = !display;
+            
+            // 通过class，使用css事先定义好的选择器修改样式
+            $(this).addClass("menu-open-style");
+            $(this).removeClass("menu-close-style");
+            
+            // 二级菜单地个数
+            let len = $(this).next().children("div").length;
+            // 二级菜单地总高度
+            let showHeight = len * twoMenuHeight;
+            let height = display ? `${showHeight}px`: "0px";
+            // 修改高度，动画显示
+            $(this).next().css("height", height);
+            //修改属性display
+            $(this).attr("display", display);
+            return false;
+        })
+
+
+
+    /**
+     * 关闭菜单，修改颜色
+     * @param oneMenuClass
+     */
+    function closeTowMenu(oneMenuClass){
+        $(`${oneMenuClass}`).each(function(i,x){
+            // 未修改前
+            let display = $(x).attr("display") == "false" ? false : true;
+            // 关闭二级(打开的状态-》关闭状态)
+            if(display){
+                // 隐藏二级菜单
+                $(x).next().css("height", "0px");
+                // 修改样式
+                $(x).removeClass("menu-open-style");
+                $(x).addClass("menu-close-style");
+                $(x).attr("display","false");
+            
+                /* 下面写其它逻辑 */
+            }
+
+        })
+    }
+    </script>
+
+</body>
+</html>
