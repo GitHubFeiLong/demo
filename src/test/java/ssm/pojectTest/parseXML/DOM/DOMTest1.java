@@ -15,7 +15,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.sun.org.apache.xerces.internal.dom.ChildNode;
 
 public class DOMTest1 {
 	public static void main(String [] args) {
