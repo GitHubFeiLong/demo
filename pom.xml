@@ -18,7 +18,7 @@
 		<!--spring 版本-->
 		<spring-version>5.0.15.RELEASE</spring-version>
 		<!-- log4j 2.X版本之后的就是log4j2了 -->
-		<log4j2-version>2.6.2</log4j2-version>
+		<log4j2-version>2.15.0</log4j2-version>
 	</properties>
 	
   <dependencies>
