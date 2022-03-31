@@ -16,7 +16,7 @@
 		<encoding>UTF-8</encoding>
 
 		<!--spring 版本-->
-		<spring-version>5.0.15.RELEASE</spring-version>
+		<spring-version>5.3.18</spring-version>
 		<!-- log4j 2.X版本之后的就是log4j2了 -->
 		<log4j2-version>2.6.2</log4j2-version>
 	</properties>
